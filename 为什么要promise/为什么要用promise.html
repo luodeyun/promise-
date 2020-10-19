@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // promise封装AJAx请求
+      function promiseAjax(url) {
+        return new Promise((res, rej) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", url);
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState !== 4) return;
+
+            if (xhr.status >= 200 && xhr.status <= 300) {
+              //如果成功了，调用reslove
+              console.log("sss");
+              res(JSON.parse(xhr.response));
+            } else {
+              rej(new Error("request error", xhr.status));
+            }
+          };
+          xhr.send();
+        });
+      }
+      promiseAjax("http://route.shwapi.com/341-2").then(
+        (value) => {
+          console.log("成功", value);
+        },
+        (reason) => {
+          console.log("失败", reason);
+        }
+      );
+    </script>
+  </body>
+</html>

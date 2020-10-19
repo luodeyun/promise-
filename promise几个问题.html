@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1.如何改变promise的的状态
+      //(1).resolve(value):如果当前是pending就会变为resolved
+      //(2).reject(reason):如果当前是pending就会变成rejected
+      //(3).抛出异常：如果当前是pending就会变为rejected
+      //2.一个promise指定多个成功、失败回调函数就会调用吗？
+      // 当promise改变为对应状态时都会调用
+      //3.改变promise状态（resolve，reject）和指定回调函数（.then）谁先谁后？
+      //(1).都有可能，正常情况下是现指定回调函数在改变状态，但也可以先改状态在改变回调函数
+      new Promise((resolve, reject) => {
+        //执行器回调函数是同步的
+        setTimeout(() => {
+          resolve(1); //pending ==> resolved
+          console.log("resolve()改变状态后");
+        }, 1000);
+      }).then((value) => {
+        console.log("onRelsolved", value);
+      });
+      //上面一般常规的：先指定回调函数后改状态
+      //先指定回调函数，内部选择将回调函数保存起来
+      //好，现在在resolve改变状态后加一个代码  看谁先输出
+      //答案是  先输出resolve()改变状态后 后输出回调函数的代码  ，说明他把回调函数放入队列里面去了，
+      //所以指定的回调函数是异步的，同步的代码执行完了才会执行队列的代码
+      //4.promise.then()返回新的promise的结果状态由什么决定?
+      //(1).简单表达：由then()指定的回调函数执行的结果决定
+      //(2).详细表达：
+      //1.如果抛出异常,新的promise变为rejected，reason为抛出的异常
+      //2.如果返回的是非promise的任意值，新的promise变为resolved，value为返回的值
+      new Promise((resolve, reject) => {
+        // resolve(1);
+        reject(2);
+      })
+        .then(
+          (value) => {
+            console.log("onResolve1()", value);
+          },
+          (reason) => console.log("onReject1()", reason)
+        )
+        .then(
+          (value) => console.log("s", value),
+          (reason) => console.log("ss", reason)
+        );
+    </script>
+  </body>
+</html>

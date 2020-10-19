@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //  1.抽象表达
+      //  (1).Promise是一门新的技术
+      //  (2).Promise是JS中进行异步编程的新的解决方案
+      // 2.具体表达
+      //  (1).从语法上说：promise是一个构造函数
+      //  (2).从功能上说：promise对象用来封装一个异步操作并可以获取其成功、失败的结果值
+
+      function myAsyncFunction(url) {
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", url);
+          xhr.onload = () => resolve(JSON.parse(xhr.responseText));
+          xhr.onerror = () => reject(JSON.parse(xhr.statusText));
+          xhr.send();
+        });
+      }
+      myAsyncFunction("http://route.showapi.com/341-2").then(
+        (value) => {
+          console.log("成功", value);
+        },
+        (reason) => {
+          console.log("失败", reason);
+        }
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+        1.Promise构造函数：promise（excutor）{}
+         excutor函数;同步执行（resolve，reject）=>{}
+         resolve函数：内部定义成功时我们调用的函数 value={} 
+         reject函数: 内部定义失败时我们调用的函数 reason=>{}
+         说明;excutor会在Promise内部立即同步回调，异步操作在执行器中执行      
+        2.Promise.prototype.then方法：(onResolved,onRejected)=>{}
+        onResoleved函数：成功的回调函数(value)=>{}
+        onRejected函数： 失败的回调函数(reason)=>{}
+        说明：指定用于得到成功value的成功回调和用于得到失败reason的失败回调
+              返回一个新的promise对象
+        3.Promise.prototype.catch方法：(onRejected)=>{}
+         onRejected函数：失败的回调函数（reason)=>{}
+         说明：then()的语法糖，相当与.then(undefined,onRejected)
+         6.promise.all方法：函数对象上的方法参数为promise数组
+         返回一个新的promise
+          当数组中的promise都成功才能成功 返回的是promise成功值的数组
+          只要一个失败就会失败，返回失败的函数
+        7.promise.race方法:(promise)=>{}
+           包含n个promsie数组
+           说明：返回一个新的promise，返回的状态为第一个成功失败的值
+        8.promise.any方法：(promise)=>{}
+          返回一个新的promise，返回的状态为第一个成功的值，也就是说与race
+          相比他不管第一个为失败的情况，返回的都是成功的状态
+         */
+      const p1 = new Promise((resolve, reject) => {
+        reject(3);
+      });
+      const p2 = Promise.reject(3);
+      const p3 = Promise.resolve(4);
+
+      p1.then((value) => console.log("p1 value", value));
+      p2.then((value) => console.log("p2 value", value));
+      p3.catch((reason) => console.log("p3 value", reason));
+      //   const p4 = Promise.all([p1, p2, p3]);
+      //   p4.then(
+      //     (value) => console.log("p4 all ", value),
+      //     (reason) => console.log("p4 all", reason)
+      //   );
+      const p5 = Promise.any([p1, p2, p3]);
+      p5.then(
+        (value) => console.log("p5 race", value),
+        (reason) => console.log("p5 race失败", reason)
+      );
+    </script>
+  </body>
+</html>
